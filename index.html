@@ -12,7 +12,6 @@
         .logo { display: block; margin: 0 auto 1rem; width: 100px; height: auto; }
         h2 { color: var(--dark-pink); margin-bottom: 1.5rem; font-weight: 400; font-size: 1.4rem; }
         
-        /* สไตล์ Dropdown และ Input */
         select, input { 
             width: 100%; padding: 12px; margin: 8px 0; 
             border: 2px solid var(--soft-pink); border-radius: 12px; 
@@ -22,11 +21,12 @@
         }
         select:focus, input:focus { border-color: var(--primary-pink); box-shadow: 0 0 8px rgba(255, 175, 204, 0.4); }
         
-        button { background-color: var(--primary-pink); color: white; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-size: 16px; width: 100%; transition: 0.3s; margin-top: 15px; font-family: 'Kanit'; font-weight: 400; }
+        button { background-color: var(--primary-pink); color: white; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-size: 16px; width: 100%; transition: 0.3s; margin-top: 15px; font-family: 'Kanit'; }
         button:hover { background-color: var(--dark-pink); transform: translateY(-2px); }
         
         #result { margin-top: 25px; display: none; text-align: left; animation: fadeIn 0.5s; background: #fffcfd; padding: 15px; border-radius: 15px; border: 1px solid var(--soft-pink); }
         .score-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #fff0f5; }
+        .total-row { font-weight: bold; color: var(--dark-pink); border-bottom: 2px solid var(--soft-pink); }
         .rank-box { background: var(--soft-pink); padding: 12px; border-radius: 12px; margin-top: 20px; text-align: center; font-weight: bold; color: #d63384; }
         .error { color: #ff4d6d; margin-top: 15px; font-size: 14px; }
         .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-pink); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; display: none; }
@@ -46,6 +46,7 @@
         <option value="cgp1">ห้องเรียน CGP ม.1</option>
         <option value="iegp1">ห้องเรียน IEGP ม.1</option>
         <option value="smte4">ห้องเรียน SMTE ม.4</option>
+        <option value="egp4">ห้องเรียน EGP ม.4</option>
     </select>
 
     <input type="text" id="idInput" placeholder="กรอกเลขบัตรประชาชน 13 หลัก" maxlength="13">
@@ -59,13 +60,14 @@
         <div class="score-item"><span>วิทยาศาสตร์</span> <span id="resSci"></span></div>
         <div class="score-item"><span>คณิตศาสตร์</span> <span id="resMath"></span></div>
         <div class="score-item"><span>ภาษาต่างประเทศ</span> <span id="resEng"></span></div>
+        <div class="score-item total-row"><span>คะแนนรวม</span> <span id="resTotal"></span></div>
         <div class="rank-box">สอบได้ลำดับที่: <span id="resRank"></span></div>
     </div>
     <div id="errorMsg" class="error"></div>
 </div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxXWyukLaaaEUK5vfjZetuehqEGhJ-28NeYeKVY6bnbpGKGnl_dfV5tMOFEDwB75nTUyw/exec"; 
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxwZZbe22ZnzMel7HdkR3wBi42TI-hXZYAlXdP0rK5gyIOZsFmI3BHFhrvKne5ewnROUQ/exec"; 
 
     function search() {
         const id = document.getElementById('idInput').value;
@@ -96,6 +98,7 @@
                     document.getElementById('resSci').innerText = res.science + " คะแนน";
                     document.getElementById('resMath').innerText = res.math + " คะแนน";
                     document.getElementById('resEng').innerText = res.english + " คะแนน";
+                    document.getElementById('resTotal').innerText = res.total + " คะแนน";
                     document.getElementById('resRank').innerText = res.rank;
                     resDiv.style.display = "block";
                 } else {
