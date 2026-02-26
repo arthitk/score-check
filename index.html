@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบตรวจสอบคะแนนสอบ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary-pink: #ffafcc; --soft-pink: #ffc8dd; --dark-pink: #fb6f92; --bg-color: #fff5f8; }
+        body { font-family: 'Kanit', sans-serif; background-color: var(--bg-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: #555; }
+        .container { background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(255, 175, 204, 0.2); width: 90%; max-width: 400px; text-align: center; }
+        h2 { color: var(--dark-pink); margin-bottom: 1.5rem; font-weight: 400; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid var(--soft-pink); border-radius: 12px; box-sizing: border-box; outline: none; font-size: 16px; text-align: center; transition: 0.3s; }
+        input:focus { border-color: var(--primary-pink); box-shadow: 0 0 8px rgba(255, 175, 204, 0.5); }
+        button { background-color: var(--primary-pink); color: white; border: none; padding: 13px; border-radius: 12px; cursor: pointer; font-size: 16px; width: 100%; transition: 0.3s; margin-top: 10px; font-family: 'Kanit'; }
+        button:hover { background-color: var(--dark-pink); transform: translateY(-2px); }
+        #result { margin-top: 25px; display: none; text-align: left; animation: fadeIn 0.5s; }
+        .score-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #fff0f5; }
+        .rank-box { background: var(--soft-pink); padding: 12px; border-radius: 12px; margin-top: 20px; text-align: center; font-weight: bold; color: #d63384; }
+        .error { color: #ff4d6d; margin-top: 15px; font-size: 14px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-pink); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; display: none; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🌸 ตรวจสอบคะแนน 🌸</h2>
+    <input type="text" id="idInput" placeholder="กรอกเลขบัตรประชาชน 13 หลัก" maxlength="13">
+    <button onclick="search()">ค้นหาคะแนน</button>
+
+    <div id="loader" class="loader"></div>
+    
+    <div id="result">
+        <p style="text-align:center">คุณ: <strong id="resName" style="color:var(--dark-pink)"></strong></p>
+        <div class="score-item"><span>วิทยาศาสตร์</span> <span id="resSci"></span></div>
+        <div class="score-item"><span>คณิตศาสตร์</span> <span id="resMath"></span></div>
+        <div class="score-item"><span>ภาษาต่างประเทศ</span> <span id="resEng"></span></div>
+        <div class="rank-box">สอบได้ลำดับที่: <span id="resRank"></span></div>
+    </div>
+    <div id="errorMsg" class="error"></div>
+</div>
+
+<script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDcJdu_6Qvlti7__YeRQNpPc18uiVvT-nFk1xi_5TQaoPXD-4SHxqsUAnb7eVHQoumXw/exec"; // <--- วาง URL ของ Google Apps Script ตรงนี้
+
+    function search() {
+        const id = document.getElementById('idInput').value;
+        const resDiv = document.getElementById('result');
+        const errorDiv = document.getElementById('errorMsg');
+        const loader = document.getElementById('loader');
+        
+        if(id.length !== 13) {
+            errorDiv.innerText = "❌ กรุณากรอกเลขให้ครบ 13 หลัก";
+            return;
+        }
+        
+        errorDiv.innerText = "";
+        resDiv.style.display = "none";
+        loader.style.display = "block";
+
+        fetch(`${SCRIPT_URL}?id=${id}`)
+            .then(response => response.json())
+            .then(res => {
+                loader.style.display = "none";
+                if(res.status === 'success') {
+                    document.getElementById('resName').innerText = res.name;
+                    document.getElementById('resSci').innerText = res.science + " คะแนน";
+                    document.getElementById('resMath').innerText = res.math + " คะแนน";
+                    document.getElementById('resEng').innerText = res.english + " คะแนน";
+                    document.getElementById('resRank').innerText = res.rank;
+                    resDiv.style.display = "block";
+                } else {
+                    errorDiv.innerText = "❌ ไม่พบข้อมูลเลขบัตรประชาชนนี้";
+                }
+            })
+            .catch(err => {
+                loader.style.display = "none";
+                errorDiv.innerText = "⚠️ เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่";
+            });
+    }
+</script>
+
+</body>
+</html>
