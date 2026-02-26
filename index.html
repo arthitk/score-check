@@ -9,6 +9,7 @@
         :root { --primary-pink: #ffafcc; --soft-pink: #ffc8dd; --dark-pink: #fb6f92; --bg-color: #fff5f8; }
         body { font-family: 'Kanit', sans-serif; background-color: var(--bg-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: #555; }
         .container { background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(255, 175, 204, 0.2); width: 90%; max-width: 400px; text-align: center; }
+        .logo { display: block; margin: 0 auto 1rem; width: 120px; } /* ปรับขนาดโลโก้ */
         h2 { color: var(--dark-pink); margin-bottom: 1.5rem; font-weight: 400; }
         input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid var(--soft-pink); border-radius: 12px; box-sizing: border-box; outline: none; font-size: 16px; text-align: center; transition: 0.3s; }
         input:focus { border-color: var(--primary-pink); box-shadow: 0 0 8px rgba(255, 175, 204, 0.5); }
@@ -26,7 +27,8 @@
 <body>
 
 <div class="container">
-    <h2>🌸 ตรวจสอบคะแนน 🌸</h2>
+    <img src="image_0.png" alt="โลโก้โรงเรียนกัลยาณวัตร" class="logo">
+    <h2>ตรวจสอบคะแนน</h2>
     <input type="text" id="idInput" placeholder="กรอกเลขบัตรประชาชน 13 หลัก" maxlength="13">
     <button onclick="search()">ค้นหาคะแนน</button>
 
